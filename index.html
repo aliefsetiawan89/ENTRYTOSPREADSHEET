@@ -5,17 +5,76 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Formulir Entri Data Siswa SMK</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #e9ecef; padding: 20px; }
-        .container { max-width: 600px; margin: 30px auto; background: #ffffff; padding: 30px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
-        h2 { text-align: center; color: #007bff; margin-bottom: 25px; }
-        label { display: block; margin: 15px 0 5px; font-weight: 600; color: #495057; }
-        input[type="text"], select { width: 100%; padding: 12px; margin-bottom: 20px; border: 1px solid #ced4da; border-radius: 5px; box-sizing: border-box; transition: border-color 0.3s; }
-        input[type="text"]:focus, select:focus { border-color: #007bff; outline: none; }
-        button { background-color: #28a745; color: white; padding: 12px 20px; border: none; border-radius: 5px; cursor: pointer; width: 100%; font-size: 16px; font-weight: bold; transition: background-color 0.3s; }
-        button:hover { background-color: #1e7e34; }
-        .message { margin-top: 20px; padding: 15px; border-radius: 5px; text-align: center; font-weight: bold; display: none; }
-        .success { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
-        .error { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background-color: #e9ecef; 
+            padding: 20px; 
+        }
+        .container { 
+            max-width: 600px; 
+            margin: 30px auto; 
+            background: #ffffff; 
+            padding: 30px; 
+            border-radius: 10px; 
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1); 
+        }
+        h2 { 
+            text-align: center; 
+            color: #007bff; 
+            margin-bottom: 25px; 
+        }
+        label { 
+            display: block; 
+            margin: 15px 0 5px; 
+            font-weight: 600; 
+            color: #495057; 
+        }
+        input[type="text"], select { 
+            width: 100%; 
+            padding: 12px; 
+            margin-bottom: 20px; 
+            border: 1px solid #ced4da; 
+            border-radius: 5px; 
+            box-sizing: border-box; 
+            transition: border-color 0.3s; 
+        }
+        input[type="text"]:focus, select:focus { 
+            border-color: #007bff; 
+            outline: none; 
+        }
+        button { 
+            background-color: #28a745; 
+            color: white; 
+            padding: 12px 20px; 
+            border: none; 
+            border-radius: 5px; 
+            cursor: pointer; 
+            width: 100%; 
+            font-size: 16px; 
+            font-weight: bold; 
+            transition: background-color 0.3s; 
+        }
+        button:hover { 
+            background-color: #1e7e34; 
+        }
+        .message { 
+            margin-top: 20px; 
+            padding: 15px; 
+            border-radius: 5px; 
+            text-align: center; 
+            font-weight: bold; 
+            display: none; /* Awalnya disembunyikan */
+        }
+        .success { 
+            background-color: #d4edda; 
+            color: #155724; 
+            border: 1px solid #c3e6cb; 
+        }
+        .error { 
+            background-color: #f8d7da; 
+            color: #721c24; 
+            border: 1px solid #f5c6cb; 
+        }
     </style>
 </head>
 <body>
@@ -44,7 +103,7 @@
             <option value="TKJ">Teknik Komputer dan Jaringan</option>
             <option value="AKL">Akuntansi Keuangan Lembaga</option>
             <option value="BDP">Bisnis Daring dan Pemasaran</option>
-            </select>
+        </select>
 
         <button type="submit" id="submit-button">Kirim Data</button>
     </form>
@@ -54,9 +113,9 @@
 
 <script>
     // *******************************************************************
-    // GANTI DENGAN URL WEB APP YANG SUDAH ANDA SALIN DARI LANGKAH 3
+    //  !!! PERHATIAN !!! GANTI DENGAN URL WEB APP APPS SCRIPT ANDA
     // *******************************************************************
-    const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxk3CuYDb2j2jF4UuM7WMlQJeNMAAAwqjtz7sKjQOak7H4GavsL7MISnoZN27Y9elI73w/exec'; 
+    const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbwlSAJA5fMoPekEdCEAxFeAehszF303fyOq-RHK9Vyxt4dv18iInLbizGvsaUNXi4Q-wg/exec'; 
     
     const form = document.getElementById('siswa-form');
     const responseMessage = document.getElementById('response-message');
@@ -82,6 +141,7 @@
         .then(response => {
             // Kita harus mengolah respons JSON dari Apps Script
             if (!response.ok) {
+                // Throw error untuk menangani status HTTP error (e.g., 404, 500)
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
             return response.json();
@@ -92,6 +152,7 @@
                 responseMessage.textContent = '✅ Data siswa berhasil dikirim dan tersimpan!';
                 form.reset(); // Kosongkan form setelah sukses
             } else {
+                // Tangani error dari Apps Script (data.result === 'error')
                 throw new Error(data.message || 'Penyimpanan data gagal.');
             }
         })
@@ -104,7 +165,8 @@
             // Aktifkan kembali tombol setelah proses selesai
             submitButton.disabled = false;
             submitButton.textContent = 'Kirim Data';
-            setTimeout(() => { responseMessage.style.display = 'none'; }, 5000); // Sembunyikan pesan setelah 5 detik
+            // Sembunyikan pesan setelah 5 detik
+            setTimeout(() => { responseMessage.style.display = 'none'; }, 5000); 
         });
     });
 </script>
